@@ -1,20 +1,24 @@
-<div class="container mx-auto p-4">
-  <h1 class="text-3xl font-bold text-center mb-8">Bank Branch Locator</h1>
+<main class="container mx-auto p-4" role="main">
+  <h1 class="text-3xl font-bold text-center mb-8" id="page-title">Bank Branch Locator</h1>
 
   <!-- Search and Filter Section -->
-  <div class="flex flex-col md:flex-row gap-4 justify-between mb-6">
+  <div class="flex flex-col md:flex-row gap-4 justify-between mb-6" role="search" aria-labelledby="search-heading">
+    <span id="search-heading" class="sr-only">Search and filter options</span>
     <!-- Search Box -->
     <div class="form-control">
+      <label for="branch-search" class="sr-only">Search branches</label>
       <div class="input-group">
         <input 
+          id="branch-search"
           type="text" 
           placeholder="Search branches..." 
           class="input input-bordered w-full" 
           [(ngModel)]="searchTerm"
           (keyup.enter)="onSearch()"
+          aria-label="Search branches"
         />
-        <button class="btn btn-primary" (click)="onSearch()">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <button class="btn btn-primary" (click)="onSearch()" aria-label="Search">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
         </button>
@@ -23,17 +27,17 @@
 
     <!-- Items Per Page Selector -->
     <div class="form-control w-full md:w-auto">
-      <label class="label">
+      <label for="page-size-select" class="label">
         <span class="label-text">Items per page</span>
       </label>
-      <select class="select select-bordered" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+      <select id="page-size-select" class="select select-bordered" [(ngModel)]="pageSize" (change)="onPageSizeChange()" aria-label="Select number of items per page">
         <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
       </select>
     </div>
   </div>
 
   <!-- Results Count -->
-  <div class="mb-4">
+  <div class="mb-4" aria-live="polite">
     <p class="text-sm text-gray-600">
       Showing {{ branches.length }} of {{ totalItems }} branches
     </p>
@@ -41,24 +45,25 @@
 
   <!-- Branches Table (visible on md screens and up) -->
   <div class="hidden md:block overflow-x-auto">
-    <table class="table table-zebra w-full">
+    <table class="table table-zebra w-full" aria-labelledby="page-title">
+      <caption class="sr-only">List of bank branches</caption>
       <thead>
         <tr>
-          <th>District</th>
-          <th>Bank</th>
-          <th>Branch</th>
-          <th>Address</th>
-          <th>Service Hours</th>
-          <th>Accessibility</th>
+          <th scope="col">District</th>
+          <th scope="col">Bank</th>
+          <th scope="col">Branch</th>
+          <th scope="col">Address</th>
+          <th scope="col">Service Hours</th>
+          <th scope="col">Accessibility</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let branch of branches">
+        <tr *ngFor="let branch of branches; let i = index">
           <td>{{ branch.district }}</td>
           <td>{{ branch.bank_name }}</td>
           <td>{{ branch.branch_name }}</td>
           <td>{{ branch.address }}</td>
-          <td [innerHTML]="formatServiceHours(branch.service_hours)"></td>
+          <td [innerHTML]="formatServiceHours(branch.service_hours)" aria-label="Service hours"></td>
           <td>{{ branch['barrier-free_access'] }}</td>
         </tr>
       </tbody>
@@ -66,42 +71,44 @@
   </div>
 
   <!-- Mobile Cards (visible on small screens only) -->
-  <div class="grid grid-cols-1 gap-4 md:hidden">
-    <div class="card bg-base-100 shadow-md" *ngFor="let branch of branches">
+  <div class="grid grid-cols-1 gap-4 md:hidden" role="list" aria-label="List of bank branches">
+    <div class="card bg-base-100 shadow-md" *ngFor="let branch of branches; let i = index" role="listitem">
       <div class="card-body p-4">
-        <h2 class="card-title text-lg">{{ branch.branch_name }}</h2>
+        <h2 class="card-title text-lg" id="branch-title-{{i}}">{{ branch.branch_name }}</h2>
         <p class="text-sm opacity-70">{{ branch.bank_name }}</p>
-        <div class="divider my-2"></div>
+        <div class="divider my-2" role="separator"></div>
         
         <div class="grid grid-cols-3 gap-2 text-sm">
-          <span class="font-bold">District:</span>
-          <span class="col-span-2">{{ branch.district }}</span>
+          <span class="font-bold" id="district-label-{{i}}">District:</span>
+          <span class="col-span-2" [attr.aria-labelledby]="'district-label-' + i">{{ branch.district }}</span>
           
-          <span class="font-bold">Address:</span>
-          <span class="col-span-2">{{ branch.address }}</span>
+          <span class="font-bold" id="address-label-{{i}}">Address:</span>
+          <span class="col-span-2" [attr.aria-labelledby]="'address-label-' + i">{{ branch.address }}</span>
           
-          <span class="font-bold">Hours:</span>
-          <div class="col-span-2" [innerHTML]="formatServiceHours(branch.service_hours)"></div>
+          <span class="font-bold" id="hours-label-{{i}}">Hours:</span>
+          <div class="col-span-2" [innerHTML]="formatServiceHours(branch.service_hours)" [attr.aria-labelledby]="'hours-label-' + i"></div>
           
-          <span class="font-bold">Access:</span>
-          <span class="col-span-2">{{ branch['barrier-free_access'] }}</span>
+          <span class="font-bold" id="access-label-{{i}}">Access:</span>
+          <span class="col-span-2" [attr.aria-labelledby]="'access-label-' + i">{{ branch['barrier-free_access'] }}</span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- No Results Message -->
-  <div *ngIf="branches.length === 0" class="text-center py-8">
+  <div *ngIf="branches.length === 0" class="text-center py-8" aria-live="polite">
     <p class="text-lg text-gray-600">No branches found with your search criteria.</p>
   </div>
 
   <!-- Pagination -->
-  <div class="flex justify-center mt-6" *ngIf="totalPages > 1">
+  <nav aria-label="Pagination" class="flex justify-center mt-6" *ngIf="totalPages > 1">
     <div class="join">
       <button 
         class="join-item btn" 
         [class.btn-disabled]="currentPage === 1"
         (click)="previousPage()"
+        aria-label="Previous page"
+        [attr.aria-disabled]="currentPage === 1"
       >
         «
       </button>
@@ -111,6 +118,8 @@
         class="join-item btn" 
         [class.btn-active]="page === currentPage"
         (click)="changePage(page)"
+        [attr.aria-current]="page === currentPage ? 'page' : null"
+        [attr.aria-label]="'Page ' + page"
       >
         {{ page }}
       </button>
@@ -119,9 +128,11 @@
         class="join-item btn" 
         [class.btn-disabled]="currentPage === totalPages"
         (click)="nextPage()"
+        aria-label="Next page"
+        [attr.aria-disabled]="currentPage === totalPages"
       >
         »
       </button>
     </div>
-  </div>
-</div>
+  </nav>
+</main>
