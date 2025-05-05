@@ -39,8 +39,8 @@
     </p>
   </div>
 
-  <!-- Branches Table -->
-  <div class="overflow-x-auto">
+  <!-- Branches Table (visible on md screens and up) -->
+  <div class="hidden md:block overflow-x-auto">
     <table class="table table-zebra w-full">
       <thead>
         <tr>
@@ -63,6 +63,31 @@
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Mobile Cards (visible on small screens only) -->
+  <div class="grid grid-cols-1 gap-4 md:hidden">
+    <div class="card bg-base-100 shadow-md" *ngFor="let branch of branches">
+      <div class="card-body p-4">
+        <h2 class="card-title text-lg">{{ branch.branch_name }}</h2>
+        <p class="text-sm opacity-70">{{ branch.bank_name }}</p>
+        <div class="divider my-2"></div>
+        
+        <div class="grid grid-cols-3 gap-2 text-sm">
+          <span class="font-bold">District:</span>
+          <span class="col-span-2">{{ branch.district }}</span>
+          
+          <span class="font-bold">Address:</span>
+          <span class="col-span-2">{{ branch.address }}</span>
+          
+          <span class="font-bold">Hours:</span>
+          <div class="col-span-2" [innerHTML]="formatServiceHours(branch.service_hours)"></div>
+          
+          <span class="font-bold">Access:</span>
+          <span class="col-span-2">{{ branch['barrier-free_access'] }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- No Results Message -->
