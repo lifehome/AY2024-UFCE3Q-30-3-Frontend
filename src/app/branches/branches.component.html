@@ -2,37 +2,37 @@
   <h1 class="text-3xl font-bold text-center mb-8" id="page-title">Bank Branch Locator</h1>
 
   <!-- Search and Filter Section -->
-  <div class="flex flex-col md:flex-row gap-4 justify-between mb-6" role="search" aria-labelledby="search-heading">
+  <div class="flex flex-col md:flex-row gap-4 justify-between items-end mb-6" role="search" aria-labelledby="search-heading">
     <span id="search-heading" class="sr-only">Search and filter options</span>
     <!-- Search Box -->
-    <div class="form-control">
-      <label for="branch-search" class="sr-only">Search branches</label>
-      <div class="input-group">
-        <input 
-          id="branch-search"
-          type="text" 
-          placeholder="Search branches..." 
-          class="input input-bordered w-full" 
-          [(ngModel)]="searchTerm"
-          (keyup.enter)="onSearch()"
-          aria-label="Search branches"
-        />
-        <button class="btn btn-primary" (click)="onSearch()" aria-label="Search">
+    <div class="join">
+      <div>
+        <label class="input join-item">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
-        </button>
+          <input 
+            type="email" 
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+            placeholder="Search branches..."
+            required
+          />
+        </label>
+        <div class="validator-hint hidden">Please enter something!</div>
       </div>
+      <button class="btn btn-secondary join-item" (click)="onSearch()" aria-label="Search">Join</button>
     </div>
 
     <!-- Items Per Page Selector -->
-    <div class="form-control w-full md:w-auto">
-      <label for="page-size-select" class="label">
-        <span class="label-text">Items per page</span>
+    <div>
+      <label for="Headline">
+        <span class="text-sm font-medium text-gray-700">Items per page</span>
+        
+        <select class="select" id="page-size-select" [(ngModel)]="pageSize" (change)="onPageSizeChange()" aria-label="Select number of items per page">
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+        </select>
       </label>
-      <select id="page-size-select" class="select select-bordered" [(ngModel)]="pageSize" (change)="onPageSizeChange()" aria-label="Select number of items per page">
-        <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
-      </select>
     </div>
   </div>
 
