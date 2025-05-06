@@ -94,6 +94,6 @@ export class BranchesComponent implements OnInit {
   }
 
   formatServiceHours(hours: string): string {
-    return hours.replace(/;;/g, '<br>');
+    return hours.replace(/(;\s?;)/g, '<br>');
   }
 }
