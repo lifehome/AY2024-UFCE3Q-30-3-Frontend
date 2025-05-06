@@ -9,4 +9,8 @@ export const routes: Routes = [
     path: 'branches',
     loadComponent: () => import('./branches/branches.component').then(m => m.BranchesComponent)
   },
+  {
+    path: 'branchEditor',
+    loadComponent: () => import('./branch-editor/branch-editor.component').then(m => m.BranchEditorComponent)
+  }
 ];
